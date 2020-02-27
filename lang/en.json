@@ -1,0 +1,14 @@
+{
+  "vtta-iconizer.icon-directory.name": "Icon directory",
+  "vtta-iconizer.icon-directory.hint": "Specificy the icon location on the server, relative to the Foundry /Data directory, e.g. 'iconizer' is '[Foundry]/Data/iconizer'.",
+  "vtta-iconizer.replacement-policy.name": "Icon replacement policy",
+  "vtta-iconizer.replacement-policy.hint": "Defines if the icons of items should be set automatically",
+  "vtta-iconizer.replacement-policy.0": "Replace all icons",
+  "vtta-iconizer.replacement-policy.1": "Replace only default icons",
+  "vtta-iconizer.replacement-policy.2": "Do not replace any icons",
+  "vtta-iconizer.icon-database-policy.name": "Icon database policy",
+  "vtta-iconizer.icon-database-policy.hint": "Defines which databases should be used when deciding on the new icon. A custom database is a JSON-file in the icon directory named 'icons.json'. See vtta-iconizer/data/icons.json for an example format. Note: Changing this setting requires a reload.",
+  "vtta-iconizer.icon-database-policy.0": "Use only the predefined database",
+  "vtta-iconizer.icon-database-policy.1": "Use the predefined database and my custom one",
+  "vtta-iconizer.icon-database-policy.2": "Use only my custom database"
+}
