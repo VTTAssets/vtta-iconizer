@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.1]
+
+### Changed
+
+- You can now select a base dictionary to use, and you can choose from two entries in the "Module Settings": Foundry Icons or World of Warcraft icons. If you want to use World of Warcraft icons, you will need to provide those and puth then flat into the directory set in the "Icon directory" setting. If you are using the icons coming with Foundry, you are good to go.
+
+### Added
+
+- You may reference an icon now relative to the "Icon directory" or absolute from the base Data path. Relative image paths are _not_ starting with a slash ('/') while absolute paths are, e.g. `path/to/image.png` will be translated to "iconizer/path/to/image.png" while `/systems/dns5e/some/icon.jpg` will be used as-is, without prefixing the "Icon directory"
+
+- Added a dictionary referencing all items that are currently coming in the compendiums of the DnD5e game system. You can update this dictionary by running the node.js script located at `/modules/vtta-iconizer/data/extract-items.js`. Change into said directory and run `node extract-items.js` to update the "foundry-icons.json" file.
+
 ## [2.0.0]
 
 Feature parity release for the relaunch of VTTAssets

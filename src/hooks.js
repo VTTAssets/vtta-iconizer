@@ -1,12 +1,13 @@
-import utils from './utils.js';
-import SettingsExtender from './settingsExtender.js';
+import utils from "./utils.js";
+import SettingsExtender from "./settingsExtender.js";
+
 SettingsExtender();
 
 /**
  * Module initialisation, game settings registering
  */
 export function init() {
-  utils.log('Init'); //console.log('Iconizer | Init');
+  utils.log("Init"); //console.log('Iconizer | Init');
   let debug = false;
   if (!CONFIG.debug.vtta) {
     CONFIG.debug.vtta = { iconizer: debug };
@@ -14,41 +15,65 @@ export function init() {
     CONFIG.debug.vtta.iconizer = debug;
   }
 
-  game.settings.register('vtta-iconizer', 'replacement-policy', {
-    name: 'vtta-iconizer.replacement-policy.name',
-    hint: 'vtta-iconizer.replacement-policy.hint',
-    scope: 'world',
+  game.settings.register("vtta-iconizer", "replacement-policy", {
+    name: "vtta-iconizer.replacement-policy.name",
+    hint: "vtta-iconizer.replacement-policy.hint",
+    scope: "world",
     config: true,
     type: Number,
     default: 0,
     choices: [
-      'vtta-iconizer.replacement-policy.0',
-      'vtta-iconizer.replacement-policy.1',
-      'vtta-iconizer.replacement-policy.2',
-    ],
+      "vtta-iconizer.replacement-policy.0",
+      "vtta-iconizer.replacement-policy.1",
+      "vtta-iconizer.replacement-policy.2"
+    ]
   });
 
-  game.settings.register('vtta-iconizer', 'icon-database-policy', {
-    name: 'vtta-iconizer.icon-database-policy.name',
-    hint: 'vtta-iconizer.icon-database-policy.hint',
-    scope: 'world',
+  game.settings.register("vtta-iconizer", "icon-database-policy", {
+    name: "vtta-iconizer.icon-database-policy.name",
+    hint: "vtta-iconizer.icon-database-policy.hint",
+    scope: "world",
     config: true,
     type: Number,
     default: 0,
     choices: [
-      'vtta-iconizer.icon-database-policy.0',
-      'vtta-iconizer.icon-database-policy.1',
-      'vtta-iconizer.icon-database-policy.2',
-    ],
+      "vtta-iconizer.icon-database-policy.0",
+      "vtta-iconizer.icon-database-policy.1",
+      "vtta-iconizer.icon-database-policy.2"
+    ]
   });
 
-  game.settings.register('vtta-iconizer', 'icon-directory', {
-    name: 'vtta-iconizer.icon-directory.name',
-    hint: 'vtta-iconizer.icon-directory.hint',
-    scope: 'world',
+  game.settings.register("vtta-iconizer", "base-dictionary", {
+    name: "vtta-iconizer.base-dictionary.name",
+    hint: "vtta-iconizer.base-dictionary.hint",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      "foundry-icons.json": "Foundry Icons",
+      "wow-icons.json": "World of Warcraft icons (offline, local icons)",
+      "wowhead-icons.json": "World of Warcraft icons (online, wowhead.com)"
+    },
+    default: "foundry-icons.json"
+  });
+
+  // Relabeling "icon directory" to "icon prefix" setting
+  game.settings.register("vtta-iconizer", "icon-directory", {
+    name: "vtta-iconizer.icon-prefix.name",
+    hint: "vtta-iconizer.icon-prefix.hint",
+    scope: "world",
     config: true,
     type: Azzu.SettingsTypes.DirectoryPicker, // String,
-    default: 'iconizer',
+    default: "iconizer"
+  });
+
+  game.settings.register("vtta-iconizer", "share-missing-icons", {
+    name: "vtta-iconizer.share-missing-icons.name",
+    hint: "vtta-iconizer.share-missing-icons.hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
   });
 }
 
@@ -57,15 +82,27 @@ export function init() {
  */
 export async function ready() {
   let iconData = new Map();
-  let iconDatabasePolicy = game.settings.get('vtta-iconizer', 'icon-database-policy');
+  let iconDatabasePolicy = game.settings.get(
+    "vtta-iconizer",
+    "icon-database-policy"
+  );
 
-  // load the icon database
+  // load the base dictionary
   if (iconDatabasePolicy === 0 || iconDatabasePolicy === 1) {
-    let path = '/modules/vtta-iconizer/data/icons.json';
+    let path = `/modules/vtta-iconizer/data/${game.settings.get(
+      "vtta-iconizer",
+      "base-dictionary"
+    )}`;
+
+    console.log("Loading JSON from " + path);
+
     let fileExists = await utils.serverFileExists(path);
+    console.log("File exists? " + fileExists);
     if (fileExists) {
-      let response = await fetch(path, { method: 'GET' });
+      let response = await fetch(path, { method: "GET" });
+
       let json = await response.json();
+      console.log(json);
       json.forEach(data => {
         iconData.set(data.name.toLowerCase(), data.icon);
       });
@@ -74,10 +111,13 @@ export async function ready() {
 
   // load the custom icon database (if there is any)
   if (iconDatabasePolicy === 1 || iconDatabasePolicy === 2) {
-    let path = `/${game.settings.get('vtta-iconizer', 'icon-directory')}/icons.json`;
+    let path = `/${game.settings.get(
+      "vtta-iconizer",
+      "icon-directory"
+    )}/icons.json`;
     let fileExists = await utils.serverFileExists(path);
     if (fileExists) {
-      let response = await fetch(path, { method: 'GET' });
+      let response = await fetch(path, { method: "GET" });
       let json = await response.json();
       json.forEach(data => {
         iconData.set(data.name.toLowerCase(), data.icon);
@@ -89,6 +129,7 @@ export async function ready() {
    * Replaces the icon if the name changed and if the game settings allow that
    */
   let replaceIcon = options => {
+    utils.log(options);
     // if there is no name change here, just continue
     if (!options || !options.name) return options;
 
@@ -96,7 +137,10 @@ export async function ready() {
     const REPLACEMENT_POLICY_REPLACE_DEFAULT = 1;
     const REPLACEMENT_POLICY_REPLACE_NONE = 2;
 
-    let replacementPolicy = game.settings.get('vtta-iconizer', 'replacement-policy');
+    let replacementPolicy = game.settings.get(
+      "vtta-iconizer",
+      "replacement-policy"
+    );
 
     // stop right here if we should not replace anything
     if (replacementPolicy === REPLACEMENT_POLICY_REPLACE_NONE) return;
@@ -104,86 +148,181 @@ export async function ready() {
     if (
       replacementPolicy === REPLACEMENT_POLICY_REPLACE_ALL ||
       (replacementPolicy === REPLACEMENT_POLICY_REPLACE_DEFAULT &&
-        (!options.img || options.img.toLowerCase().indexOf('mystery-man') !== -1))
+        (!options.img ||
+          options.img.toLowerCase().indexOf("mystery-man") !== -1))
     ) {
-      utils.log('Pre-processing');
-      utils.log(options);
+      console.log("Pre-processing");
+      console.log(options);
       let name = options.name
         .toLowerCase()
-        .replace(/\([^)]*\)/g, '')
+        .replace(/\([^)]*\)/g, "")
         .trim();
       let newIcon = iconData.get(name);
 
       if (newIcon !== undefined) {
-        let directory = game.settings.get('vtta-iconizer', 'icon-directory');
-        options.img = directory + '/' + newIcon;
+        // accept absolute references to icons and do not prefix with the icon directory
+        if (
+          newIcon.startsWith("/") ||
+          newIcon.indexOf("://") === 0 ||
+          newIcon.indexOf("http") === 0
+        ) {
+          options.img = newIcon;
+        } else {
+          // online references by wowhead-icons.json
+          let baseDictionary = game.settings.get(
+            "vtta-iconizer",
+            "base-dictionary"
+          );
+          if (baseDictionary === "wowhead-icons.json") {
+            options.img =
+              "https://wow.zamimg.com/images/wow/icons/large" + "/" + newIcon;
+          } else {
+            options.img =
+              game.settings.get("vtta-iconizer", "icon-directory") +
+              "/" +
+              newIcon;
+          }
+          console.log("options.img: " + options.img);
+        }
       } else {
         if (replacementPolicy === 0) {
-          options.img = 'icons/svg/mystery-man.svg';
+          options.img = "icons/svg/mystery-man.svg";
         }
       }
-      utils.log('Post-processing');
+      utils.log("Post-processing");
       utils.log(options);
     } else {
-      utils.log('Not replacing icon');
+      utils.log("Not replacing icon");
     }
 
     return options;
   };
 
-  // Hook on the item create events to replace the icon
-  Hooks.on('preCreateItem', (createData, options) => {
-    options = replaceIcon(options);
-  });
+  let submitItem = (name, type, subType) => {
+    const query = {
+      name: name,
+      type: type,
+      subType: subType
+    };
 
-  Hooks.on('preCreateOwnedItem', (parent, createData, options) => {
-    if (!options.img) {
-      let item = parent.getEmbeddedEntity('OwnedItem', options._id);
-      if (item) {
-        options.img = parent.img;
-      }
+    if (
+      game.settings.get("vtta-iconizer", "share-missing-icons") &&
+      query.subType &&
+      game.system.id === "dnd5e"
+    ) {
+      // It looks like an D&D Beyond import
+
+      let url = `http://localhost:3001/iconizer/items/submit`;
+      ui.notifications.info("Would submit item: " + query);
+      fetch(url, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(query)
+      })
+        .then(response => {
+          if (response.status === 200) {
+            console.log(
+              "VTTA Iconizer | Icon submitted successfully - thank you!"
+            );
+          }
+        })
+        .catch(error => {
+          utils.log("Error while sending the item data to VTTAssets");
+          utils.log(error.message);
+        });
     }
+  };
 
+  // Hook on the item create events to replace the icon
+  Hooks.on("preCreateItem", (createData, options) => {
+    console.log("preCreateItem starts");
     options = replaceIcon(options);
+    console.log("New options: ");
+    console.log(options);
+    console.log("preCreateItem finshed");
   });
 
-  Hooks.on('preUpdateItem', (createData, options) => {
-    utils.log('preUpdateItem');
+  Hooks.on("preCreateOwnedItem", (parent, createData, options) => {
+    console.log("## preCreateOwnedItem");
+    console.log(options);
+    // if (!options.img) {
+    //   let item = parent.getEmbeddedEntity("OwnedItem", options._id);
+    //   if (item) {
+    //     console.log(">>> Parent.img:" + parent.img);
+    //     console.log(">>> item.img:" + item.img);
+    //     options.img = item.img;
+    //   }
+    // }
+    options = replaceIcon(options);
+
+    console.log("+++++++++++++++++++++++++++++++++++++++");
+    console.log(
+      "preCreateOwnedItem almost finished, let's check if that item came from a Foundry import:"
+    );
+    console.log("Options.flags?" + options.flags);
+    if (
+      options.flags &&
+      options.flags.vtta &&
+      options.flags.vtta.dndbeyond &&
+      options.flags.vtta.dndbeyond.type &&
+      (options.img === undefined ||
+        options.img.toLowerCase() === "icons/svg/mystery-man.svg")
+    ) {
+      submitItem(options.name, options.type, options.flags.vtta.dndbeyond.type);
+    }
+    console.log("preCreateOwnedItem finshed");
+  });
+
+  Hooks.on("preUpdateItem", (createData, options) => {
+    utils.log("preUpdateItem");
     if (!options.img) {
       options.img = createData.img;
     }
     options = replaceIcon(options);
+    console.log("preUpdateItem finshed");
   });
 
-  Hooks.on('preUpdateOwnedItem', (parent, createData, options) => {
-    utils.log('preUpdateOwnedItem');
+  Hooks.on("preUpdateOwnedItem", (parent, createData, options) => {
+    utils.log("preUpdateOwnedItem");
     if (!options.img) {
-      let item = parent.getEmbeddedEntity('OwnedItem', options._id);
+      let item = parent.getEmbeddedEntity("OwnedItem", options._id);
       if (item) {
         options.img = item.img;
       }
     }
     options = replaceIcon(options);
+    console.log("preUpdateOwnedItem finshed");
   });
 
-  document.addEventListener('queryIcon', event => {
+  document.addEventListener("queryIcon", event => {
     if (event.detail && event.detail.name) {
       let response = replaceIcon({ name: event.detail.name });
-      document.dispatchEvent(new CustomEvent('deliverIcon', response));
-      utils.log('queryIcon');
+      document.dispatchEvent(new CustomEvent("deliverIcon", response));
+      utils.log("queryIcon");
       utils.log(response);
     }
   });
 
-  document.addEventListener('queryIcons', event => {
-    if (event.detail && event.detail.names && Array.isArray(event.detail.names)) {
+  document.addEventListener("queryIcons", event => {
+    console.log("++++++ EVENT LISTENER CALLED +++++");
+    if (
+      event.detail &&
+      event.detail.names &&
+      Array.isArray(event.detail.names)
+    ) {
       let response = [];
       for (let name of event.detail.names) {
+        let result = replaceIcon(name);
+        console.log(result);
         response.push(replaceIcon(name));
       }
-      utils.log('queryIcons');
-      utils.log(response);
-      document.dispatchEvent(new CustomEvent('deliverIcon', { detail: response }));
+
+      document.dispatchEvent(
+        new CustomEvent("deliverIcon", { detail: results })
+      );
     }
   });
 }
