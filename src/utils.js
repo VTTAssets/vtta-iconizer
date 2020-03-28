@@ -29,7 +29,10 @@ let utils = {
         for (j = 1; j <= alen; j++) {
           tmp = row[j - 1];
           row[j - 1] = res;
-          res = b[i - 1] === a[j - 1] ? tmp : Math.min(tmp + 1, Math.min(res + 1, row[j] + 1));
+          res =
+            b[i - 1] === a[j - 1]
+              ? tmp
+              : Math.min(tmp + 1, Math.min(res + 1, row[j] + 1));
         }
       }
       return res;
@@ -53,7 +56,7 @@ let utils = {
   },
   // Thanks, @Atropos!
   async serverFileExists(src) {
-    return fetch(src, { method: 'HEAD' })
+    return fetch(src, { method: "HEAD" })
       .then(resp => {
         return resp.status < 400;
       })
@@ -66,7 +69,7 @@ let utils = {
       http.onreadystatechange = function() {
         console.log("++++++++++++++++++');Download started");
         if (this.readyState == 4) {
-          console.log('LOAD JSON ++++++++++++++++++');
+          console.log("LOAD JSON ++++++++++++++++++");
           console.log(this.status);
           // parse the templates
           if (this.status === 200) {
@@ -77,23 +80,44 @@ let utils = {
           }
         }
       };
-      http.open('GET', path, true);
+      http.open("GET", path, true);
       http.send();
     });
   },
   log: obj => {
-    const LOG_PREFIX = 'VTTA Iconizer';
-    if (CONFIG && CONFIG.debug && CONFIG.debug.vtta && CONFIG.debug.vtta.iconizer)
+    const LOG_PREFIX = "VTTA Iconizer";
+    if (
+      CONFIG &&
+      CONFIG.debug &&
+      CONFIG.debug.vtta &&
+      CONFIG.debug.vtta.iconizer
+    )
       switch (typeof obj) {
-        case 'object':
-        case 'array':
+        case "object":
+        case "array":
           console.log(`${LOG_PREFIX} | ${typeof obj}`);
           console.log(obj);
           break;
         default:
           console.log(`${LOG_PREFIX} | ${obj}`);
       }
-  },
+  }
+  // checks for a given file
+  // serverFileExists: path => {
+  //   return new Promise((resolve, reject) => {
+  //     let http = new XMLHttpRequest();
+  //     http.open("HEAD", path);
+  //     http.onreadystatechange = function() {
+  //       if (this.readyState == this.DONE) {
+  //         if (this.status !== 404) {
+  //           resolve(path);
+  //         } else {
+  //           reject(path);
+  //         }
+  //       }
+  //     };
+  //   });
+  // }
 };
 
 export default utils;
