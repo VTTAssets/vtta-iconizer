@@ -4,6 +4,8 @@
 
 ### Changed
 
+- Removed the dnd5e system requirement. While the icon database is tied to the dnd5e system/ D&D Beyond item names, the base functionality of the module can be very useful for other game systems, too. For the time being, at least one default database will always be loaded, though, so you might have some memory consumption that you can't make use of. This will probably change in a later revision of the module.
+
 - You can now select a base dictionary to use, and you can choose from two entries in the "Module Settings": Foundry Icons or World of Warcraft icons.
 
   If you want to use World of Warcraft icons, you will need to provide those and put them flat into the directory set in the "Icon directory" setting.

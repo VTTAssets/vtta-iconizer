@@ -7,7 +7,7 @@ SettingsExtender();
  * Module initialisation, game settings registering
  */
 export function init() {
-  utils.log("Init"); //console.log('Iconizer | Init');
+  utils.log("Init");
   let debug = false;
   if (!CONFIG.debug.vtta) {
     CONFIG.debug.vtta = { iconizer: debug };
@@ -95,15 +95,11 @@ export async function ready() {
       "base-dictionary"
     )}`;
 
-    console.log("Loading JSON from " + path);
-
     let fileExists = await utils.serverFileExists(path);
-    console.log("File exists? " + fileExists);
     if (fileExists) {
       let response = await fetch(path, { method: "GET" });
 
       let json = await response.json();
-      console.log(json);
       json.forEach(data => {
         iconData.set(data.name.toLowerCase(), data.icon);
       });
@@ -152,8 +148,6 @@ export async function ready() {
         (!options.img ||
           options.img.toLowerCase().indexOf("mystery-man") !== -1))
     ) {
-      console.log("Pre-processing");
-      console.log(options);
       let name = options.name
         .toLowerCase()
         .replace(/\([^)]*\)/g, "")
@@ -183,7 +177,6 @@ export async function ready() {
               "/" +
               newIcon;
           }
-          console.log("options.img: " + options.img);
         }
       } else {
         if (replacementPolicy === 0) {
@@ -243,11 +236,7 @@ export async function ready() {
 
   // Hook on the item create events to replace the icon
   Hooks.on("preCreateItem", (createData, options) => {
-    console.log("preCreateItem starts");
     options = replaceIcon(options);
-    console.log("New options: ");
-    console.log(options);
-    console.log("preCreateItem finshed");
   });
 
   Hooks.on("preCreateOwnedItem", (parent, createData, options) => {
