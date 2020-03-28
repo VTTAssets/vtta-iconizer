@@ -67,14 +67,15 @@ export function init() {
     default: "iconizer"
   });
 
-  game.settings.register("vtta-iconizer", "share-missing-icons", {
-    name: "vtta-iconizer.share-missing-icons.name",
-    hint: "vtta-iconizer.share-missing-icons.hint",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false
-  });
+  // Submitting icons is a todo
+  // game.settings.register("vtta-iconizer", "share-missing-icons", {
+  //   name: "vtta-iconizer.share-missing-icons.name",
+  //   hint: "vtta-iconizer.share-missing-icons.hint",
+  //   scope: "world",
+  //   config: true,
+  //   type: Boolean,
+  //   default: false
+  // });
 }
 
 /**
@@ -198,6 +199,9 @@ export async function ready() {
     return options;
   };
 
+  /*
+   * Submitting icons will be coming, need to prepare backend for it
+   * /
   let submitItem = (name, type, subType) => {
     const query = {
       name: name,
@@ -235,6 +239,7 @@ export async function ready() {
         });
     }
   };
+  */
 
   // Hook on the item create events to replace the icon
   Hooks.on("preCreateItem", (createData, options) => {
@@ -246,34 +251,24 @@ export async function ready() {
   });
 
   Hooks.on("preCreateOwnedItem", (parent, createData, options) => {
-    console.log("## preCreateOwnedItem");
-    console.log(options);
-    // if (!options.img) {
-    //   let item = parent.getEmbeddedEntity("OwnedItem", options._id);
-    //   if (item) {
-    //     console.log(">>> Parent.img:" + parent.img);
-    //     console.log(">>> item.img:" + item.img);
-    //     options.img = item.img;
-    //   }
-    // }
     options = replaceIcon(options);
 
-    console.log("+++++++++++++++++++++++++++++++++++++++");
-    console.log(
-      "preCreateOwnedItem almost finished, let's check if that item came from a Foundry import:"
-    );
-    console.log("Options.flags?" + options.flags);
-    if (
-      options.flags &&
-      options.flags.vtta &&
-      options.flags.vtta.dndbeyond &&
-      options.flags.vtta.dndbeyond.type &&
-      (options.img === undefined ||
-        options.img.toLowerCase() === "icons/svg/mystery-man.svg")
-    ) {
-      submitItem(options.name, options.type, options.flags.vtta.dndbeyond.type);
-    }
-    console.log("preCreateOwnedItem finshed");
+    // console.log("+++++++++++++++++++++++++++++++++++++++");
+    // console.log(
+    //   "preCreateOwnedItem almost finished, let's check if that item came from a Foundry import:"
+    // );
+    // console.log("Options.flags?" + options.flags);
+    // if (
+    //   options.flags &&
+    //   options.flags.vtta &&
+    //   options.flags.vtta.dndbeyond &&
+    //   options.flags.vtta.dndbeyond.type &&
+    //   (options.img === undefined ||
+    //     options.img.toLowerCase() === "icons/svg/mystery-man.svg")
+    // ) {
+    //   submitItem(options.name, options.type, options.flags.vtta.dndbeyond.type);
+    // }
+    // console.log("preCreateOwnedItem finshed");
   });
 
   Hooks.on("preUpdateItem", (createData, options) => {
@@ -282,7 +277,6 @@ export async function ready() {
       options.img = createData.img;
     }
     options = replaceIcon(options);
-    console.log("preUpdateItem finshed");
   });
 
   Hooks.on("preUpdateOwnedItem", (parent, createData, options) => {
@@ -294,7 +288,6 @@ export async function ready() {
       }
     }
     options = replaceIcon(options);
-    console.log("preUpdateOwnedItem finshed");
   });
 
   document.addEventListener("queryIcon", event => {
@@ -307,7 +300,6 @@ export async function ready() {
   });
 
   document.addEventListener("queryIcons", event => {
-    console.log("++++++ EVENT LISTENER CALLED +++++");
     if (
       event.detail &&
       event.detail.names &&
@@ -316,12 +308,11 @@ export async function ready() {
       let response = [];
       for (let name of event.detail.names) {
         let result = replaceIcon(name);
-        console.log(result);
         response.push(replaceIcon(name));
       }
 
       document.dispatchEvent(
-        new CustomEvent("deliverIcon", { detail: results })
+        new CustomEvent("deliverIcon", { detail: response })
       );
     }
   });

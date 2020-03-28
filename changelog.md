@@ -4,13 +4,49 @@
 
 ### Changed
 
-- You can now select a base dictionary to use, and you can choose from two entries in the "Module Settings": Foundry Icons or World of Warcraft icons. If you want to use World of Warcraft icons, you will need to provide those and puth then flat into the directory set in the "Icon directory" setting. If you are using the icons coming with Foundry, you are good to go.
+- You can now select a base dictionary to use, and you can choose from two entries in the "Module Settings": Foundry Icons or World of Warcraft icons.
 
-### Added
+  If you want to use World of Warcraft icons, you will need to provide those and put them flat into the directory set in the "Icon directory" setting.
 
-- You may reference an icon now relative to the "Icon directory" or absolute from the base Data path. Relative image paths are _not_ starting with a slash ('/') while absolute paths are, e.g. `path/to/image.png` will be translated to "iconizer/path/to/image.png" while `/systems/dns5e/some/icon.jpg` will be used as-is, without prefixing the "Icon directory"
+  If you are using the icons coming with Foundry, you are good to go.
+
+- The setting that was called "Icon directory" is now called "Icon prefix" to hint more flexibility. When Iconizer finds a reference to a filename in his dictionary, it prefixes the filename with the value found in this setting.
+
+  For example, if you are creating a "Longbow", and iconizer has the following dictionary entry:
+
+  ```
+  {
+      "name": "Longbow",
+      "icon": "my-almighty-longbow-of-endurance.png"
+  }
+  ```
+
+  If you stored your icons in the directory `iconizer`, you would set the prefix to `iconizer`, and the icon URL will be set to `iconizer/my-almighty-longbow-of-endurance.png`.
+
+  If you stored your icons in an S3 bucket, you can set the prefix to `https://my-s3.storage.com/bucket` and the resulting URL would be `https://my-s3.storage.com/bucket/my-almighty-longbow-of-endurance.png`.
+
+  Furthermore: Your dictionary entries can now contain absolute paths to icons:
+
+  ```
+  {
+      "name": "Longbow",
+      "icon": "my-almighty-longbow-of-endurance.png"
+  },
+  {
+      "name": "Axe",
+      "icon": "/my/absolute/path/to/axe.jpg"
+  },
+  {
+      "name": "Shield +1",
+      "icon": "https://awesomeicons.com/shield.gif"
+  }
+  ```
+
+  The first entry will be prefixed with the `Icon prefix`, while both the Axe and the shield will not be changed.
 
 - Added a dictionary referencing all items that are currently coming in the compendiums of the DnD5e game system. You can update this dictionary by running the node.js script located at `/modules/vtta-iconizer/data/extract-items.js`. Change into said directory and run `node extract-items.js` to update the "foundry-icons.json" file.
+
+- Added a dictionary referencing the same World of Warcraft icons, but using a online resource instead of a local icon library. This feature is experimental and might be removed in the future.
 
 ## [2.0.0]
 
