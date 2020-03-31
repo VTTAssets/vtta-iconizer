@@ -1,6 +1,12 @@
 # Changelog
 
-## [2.1.0]
+## [2.1.2] Foundry 0.5.3 compatability release
+
+### Changed
+
+- Set compatibleCoreVersion to 0.5.3
+
+## [2.1.1]
 
 ### Changed
 
