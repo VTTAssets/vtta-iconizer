@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.4] Hotfix
+
+- Because reading is hard
+
 ## [2.1.3] Collab is Love
 
 Accompagnied with some backend work, I put in the extra effort to provide a hassle-free community tool for assigning suitable icons for items yet missing one: You can find it on https://www.vttassets.com/iconizer and is available for every Patron of mine - if you have some free time, check back on the website if there are new imports that need some love.

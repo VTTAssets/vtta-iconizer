@@ -212,35 +212,44 @@ export async function ready() {
           "wowhead-icons.json")
     ) {
       // It looks like an D&D Beyond import
-      let url = `http://www.vttassets.com/api/iconizer/items/submit`;
+      let url = `https://www.vttassets.com/api/iconizer/items/submit`;
       //let url = `http://localhost:3000/api/iconizer/items/submit`;
-      console.log("VTTA Iconizer | Would submit item: ");
+      console.log("VTTA Iconizer | Submitting item: ");
       console.log(query);
-      fetch(url, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(query),
-      })
-        .then((response) => {
-          if (response.status === 200) {
-            ui.notifications.info(
-              "VTTA Iconizer | Item succesfully submitted: " +
-                query.name +
-                " / " +
-                query.type
-            );
-            console.log(
-              "VTTA Iconizer | Item submitted successfully - thank you!"
-            );
-          }
+      try {
+        fetch(url, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(query),
         })
-        .catch((error) => {
-          utils.log("Error while sending the item data to VTTAssets");
-          utils.log(error.message);
-        });
+          .then((response) => {
+            console.log(response);
+            if (response.status === 200) {
+              ui.notifications.info(
+                "VTTA Iconizer | Item succesfully submitted: " +
+                  query.name +
+                  " / " +
+                  query.type
+              );
+              console.log(
+                "VTTA Iconizer | Item submitted successfully - thank you!"
+              );
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            utils.log("Error while sending the item data to VTTAssets");
+            utils.log(error.message);
+          })
+          .finally(() => {
+            console.log("Welp!");
+          });
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
