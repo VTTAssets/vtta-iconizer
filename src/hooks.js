@@ -212,8 +212,8 @@ export async function ready() {
           "wowhead-icons.json")
     ) {
       // It looks like an D&D Beyond import
-      //let url = `http://www.vttassets.com/api/iconizer/items/submit`;
-      let url = `http://localhost:3000/api/iconizer/items/submit`;
+      let url = `http://www.vttassets.com/api/iconizer/items/submit`;
+      //let url = `http://localhost:3000/api/iconizer/items/submit`;
       console.log("VTTA Iconizer | Would submit item: ");
       console.log(query);
       fetch(url, {
