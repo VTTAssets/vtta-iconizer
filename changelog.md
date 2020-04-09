@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.5] Hotfix 
+
+- Iconizer does not replace existing, manually set icons any longer with the Mystery Man when nothing is found in the dictionary that seems like a better fit when the Icon Replacement Policy is set to "Always replace"
+
 ## [2.1.4] Hotfix
 
 - Because reading is hard

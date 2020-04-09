@@ -180,7 +180,7 @@ export async function ready() {
         }
       } else {
         if (replacementPolicy === 0) {
-          options.img = "icons/svg/mystery-man.svg";
+          //options.img = "icons/svg/mystery-man.svg";
         }
       }
       utils.log("Post-processing");
