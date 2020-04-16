@@ -76,6 +76,42 @@ export function init() {
     type: Boolean,
     default: false,
   });
+
+  // check for failed registered settings
+  let hasErrors = false;
+  if (game.settings.settings instanceof Map) {
+    for (let s of game.settings.settings.values()) {
+      if (s.module !== "vtta-iconizer") continue;
+      try {
+        game.settings.get(s.module, s.key);
+      } catch (err) {
+        hasErrors = true;
+        ui.notifications.info(
+          `[${s.module}] Erroneous module settings found, resetting to default.`
+        );
+        game.settings.set(s.module, s.key, s.default);
+      }
+    }
+  } else {
+    for (let prop in game.settings.settings) {
+      let s = game.settings.settings[prop];
+      if (s.module !== "vtta-iconizer") continue;
+      try {
+        game.settings.get(s.module, s.key);
+      } catch (err) {
+        hasErrors = true;
+        ui.notifications.info(
+          `[${s.module}] Erroneous module settings found, resetting to default.`
+        );
+        game.settings.set(s.module, s.key, s.default);
+      }
+    }
+  }
+  if (hasErrors) {
+    ui.notifications.warn(
+      "Please review the module settings to re-adjust them to your desired configuration."
+    );
+  }
 }
 
 /**
@@ -254,12 +290,22 @@ export async function ready() {
   };
 
   // Hook on the item create events to replace the icon
-  Hooks.on("preCreateItem", (createData, options) => {
+  Hooks.on("preCreateItem", (createData, options, userId) => {
     console.log("preCreateItem");
-    options = replaceIcon(options);
+    createData = replaceIcon(createData);
   });
 
-  Hooks.on("preCreateOwnedItem", (parent, createData, options) => {
+  Hooks.on("preUpdateItem", (entity, updateData, options, userId) => {
+    //Hooks.on("preUpdateItem", (createData, options) => {
+    utils.log("preUpdateItem");
+    if (!updateData.img) {
+      updateData.img = entity.img;
+    }
+    updateData = replaceIcon(updateData);
+  });
+
+  Hooks.on("preCreateOwnedItem", (createData, options, userId) => {
+    //Hooks.on("preCreateOwnedItem", (parent, createData, options) => {
     options = replaceIcon(options);
     console.log("+++++++++++++++++++++++++++++++++++++++");
     console.log(
@@ -281,18 +327,11 @@ export async function ready() {
     console.log("preCreateOwnedItem finshed");
   });
 
-  Hooks.on("preUpdateItem", (createData, options) => {
-    utils.log("preUpdateItem");
-    if (!options.img) {
-      options.img = createData.img;
-    }
-    options = replaceIcon(options);
-  });
-
-  Hooks.on("preUpdateOwnedItem", (parent, createData, options) => {
+  Hooks.on("preUpdateOwnedItem", (entity, updateData, options, userId) => {
+    //Hooks.on("preUpdateOwnedItem", (parent, createData, options) => {
     utils.log("preUpdateOwnedItem");
     if (!options.img) {
-      let item = parent.getEmbeddedEntity("OwnedItem", options._id);
+      let item = entity.getEmbeddedEntity("OwnedItem", options._id);
       if (item) {
         options.img = item.img;
       }

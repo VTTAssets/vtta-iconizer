@@ -1,10 +1,19 @@
 # Changelog
 
-## [2.1.6] Hotfix 
+## [2.1.7] Foundry 0.5.4 compatibility release
+
+Note that this version needed to adjust to breaking changes in the API, resulting in incompatiblity to Foundry versions preceding 0.5.4.
+
+### Fixed
+
+- Adjusted to the new `(pre)(CreateOwned)Item` changes in the API
+- Changed settings-extender to the API changes in `game.settings.settings` now being a `Map`
+
+## [2.1.6] Hotfix
 
 - That's what happens if you release in a rush
 
-## [2.1.5] Hotfix 
+## [2.1.5] Hotfix
 
 - Iconizer does not replace existing, manually set icons any longer with the Mystery Man when nothing is found in the dictionary that seems like a better fit when the Icon Replacement Policy is set to "Always replace"
 
@@ -16,11 +25,11 @@
 
 Accompagnied with some backend work, I put in the extra effort to provide a hassle-free community tool for assigning suitable icons for items yet missing one: You can find it on https://www.vttassets.com/iconizer and is available for every Patron of mine - if you have some free time, check back on the website if there are new imports that need some love.
 
-"Only for Patreons!?" you might ask? Take a deep breath: Making the tool to assign icons publicly available *could* result in a diminuished icon selection quality, and I do trust my people. The resulting icon dictionary though will be regularly included in the latest releast of iconizer, of course, and publicly available.
+"Only for Patreons!?" you might ask? Take a deep breath: Making the tool to assign icons publicly available _could_ result in a diminuished icon selection quality, and I do trust my people. The resulting icon dictionary though will be regularly included in the latest releast of iconizer, of course, and publicly available.
 
-In order to get to know all (at least at some point) items currently available on D&D Beyond, you will have the option to submit item names that are lacking an icon to vttassets.com. Please check the Module settings to opt-in to actually submit those icons to try to get to 100% coverage - wohoo! 
+In order to get to know all (at least at some point) items currently available on D&D Beyond, you will have the option to submit item names that are lacking an icon to vttassets.com. Please check the Module settings to opt-in to actually submit those icons to try to get to 100% coverage - wohoo!
 
-Privacy policy statement: Transmitted is the item name, the item type (weapon, equipment, consumable etc.), and an icon subtype coming from the character import (e.g. "Longsword", "Class Feature") and this info is all that is saved to the database. 
+Privacy policy statement: Transmitted is the item name, the item type (weapon, equipment, consumable etc.), and an icon subtype coming from the character import (e.g. "Longsword", "Class Feature") and this info is all that is saved to the database.
 
 Another bummer for some ppeople: Yes, this only workswith the World of Warcraft Icon set, and no, I have no plans to make that possible for other icons sets (yet? So much to do, so little time!) - sorry!
 
