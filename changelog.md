@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.8] Foundry 0.5.5 compatibility release
+
+**Note**: This release is available for 0.5.5 and up only.
+
+### Changed
+
+- Included the officially release settings-extender instead of my patched one
+- Added failsaves for corrupt game settings stored in the database
+
+### Fixed
+
+- Repairing corrupted game settings now in `ready` to avoid throwing errors for incorrectly using the uninitialized ui.notifications
+
 ## [2.1.7] Foundry 0.5.4 compatibility release
 
 Note that this version needed to adjust to breaking changes in the API, resulting in incompatiblity to Foundry versions preceding 0.5.4.

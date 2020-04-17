@@ -2,9 +2,9 @@
   "name": "vtta-iconizer",
   "title": "Virtual Tabletop Assets - Iconizer",
   "description": "Sets item's icons automatically based on a prepulated and/or user-defined dictionary",
-  "version": "2.1.7",
-  "minimumCoreVersion": "0.5.4",
-  "compatibleCoreVersion": "0.5.4",
+  "version": "2.1.8",
+  "minimumCoreVersion": "0.5.5",
+  "compatibleCoreVersion": "0.5.5",
   "author": "Sebastian Will",
   "languages": [
     {
@@ -19,7 +19,6 @@
     }
   ],
   "esmodules": ["src/index.js"],
-  "script": "src/settingsExtender.js",
   "styles": [],
   "packs": [],
   "url": "https://www.vttassets.com/asset/vtta-iconizer",
