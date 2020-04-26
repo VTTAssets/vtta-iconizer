@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.9] 
+
+### Changed
+
+- Changed the "Item Prefix" setting from a directory to a string value. This reflects the setting better since the item prefix can be a URL, a path, a directory... anything really.
+- Removed the option to share missing icons since the Item Collaboration is working on a brand new icon set, so collecting data from the World of Warcraft icon set is not needed anymore.
+ 
 ## [2.1.8] Foundry 0.5.5 compatibility release
 
 **Note**: This release is available for 0.5.5 and up only.

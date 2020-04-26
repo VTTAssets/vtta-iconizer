@@ -63,19 +63,19 @@ export function init() {
     hint: "vtta-iconizer.icon-prefix.hint",
     scope: "world",
     config: true,
-    type: Azzu.SettingsTypes.DirectoryPicker, // String,
+    type: String,
     default: "iconizer",
   });
 
   // Submitting icons is a todo
-  game.settings.register("vtta-iconizer", "share-missing-icons", {
-    name: "vtta-iconizer.share-missing-icons.name",
-    hint: "vtta-iconizer.share-missing-icons.hint",
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false,
-  });
+  // game.settings.register("vtta-iconizer", "share-missing-icons", {
+  //   name: "vtta-iconizer.share-missing-icons.name",
+  //   hint: "vtta-iconizer.share-missing-icons.hint",
+  //   scope: "world",
+  //   config: true,
+  //   type: Boolean,
+  //   default: false,
+  // });
 }
 
 /**
@@ -217,63 +217,63 @@ export async function ready() {
   /*
    * Submitting icons will be coming, need to prepare backend for it
    */
-  let submitItem = (name, type, subType) => {
-    const query = {
-      name: name,
-      type: type,
-      subType: subType,
-    };
+  // let submitItem = (name, type, subType) => {
+  //   const query = {
+  //     name: name,
+  //     type: type,
+  //     subType: subType,
+  //   };
 
-    if (
-      game.settings.get("vtta-iconizer", "share-missing-icons") &&
-      query.subType &&
-      game.system.id === "dnd5e" &&
-      (game.settings.get("vtta-iconizer", "base-dictionary") ===
-        "wow-icons.json" ||
-        game.settings.get("vtta-iconizer", "base-dictionary") ===
-          "wowhead-icons.json")
-    ) {
-      // It looks like an D&D Beyond import
-      let url = `https://www.vttassets.com/api/iconizer/items/submit`;
-      //let url = `http://localhost:3000/api/iconizer/items/submit`;
-      console.log("VTTA Iconizer | Submitting item: ");
-      console.log(query);
-      try {
-        fetch(url, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(query),
-        })
-          .then((response) => {
-            console.log(response);
-            if (response.status === 200) {
-              ui.notifications.info(
-                "VTTA Iconizer | Item succesfully submitted: " +
-                  query.name +
-                  " / " +
-                  query.type
-              );
-              console.log(
-                "VTTA Iconizer | Item submitted successfully - thank you!"
-              );
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            utils.log("Error while sending the item data to VTTAssets");
-            utils.log(error.message);
-          })
-          .finally(() => {
-            console.log("Welp!");
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+  //   if (
+  //     game.settings.get("vtta-iconizer", "share-missing-icons") &&
+  //     query.subType &&
+  //     game.system.id === "dnd5e" &&
+  //     (game.settings.get("vtta-iconizer", "base-dictionary") ===
+  //       "wow-icons.json" ||
+  //       game.settings.get("vtta-iconizer", "base-dictionary") ===
+  //         "wowhead-icons.json")
+  //   ) {
+  //     // It looks like an D&D Beyond import
+  //     let url = `https://www.vttassets.com/api/iconizer/items/submit`;
+  //     //let url = `http://localhost:3000/api/iconizer/items/submit`;
+  //     console.log("VTTA Iconizer | Submitting item: ");
+  //     console.log(query);
+  //     try {
+  //       fetch(url, {
+  //         method: "POST",
+  //         headers: {
+  //           Accept: "application/json",
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(query),
+  //       })
+  //         .then((response) => {
+  //           console.log(response);
+  //           if (response.status === 200) {
+  //             ui.notifications.info(
+  //               "VTTA Iconizer | Item succesfully submitted: " +
+  //                 query.name +
+  //                 " / " +
+  //                 query.type
+  //             );
+  //             console.log(
+  //               "VTTA Iconizer | Item submitted successfully - thank you!"
+  //             );
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           console.log(error);
+  //           utils.log("Error while sending the item data to VTTAssets");
+  //           utils.log(error.message);
+  //         })
+  //         .finally(() => {
+  //           console.log("Welp!");
+  //         });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
 
   // Hook on the item create events to replace the icon
   Hooks.on("preCreateItem", (createData, options, userId) => {
@@ -299,17 +299,17 @@ export async function ready() {
     );
     console.log(options);
 
-    console.log("Options.flags?" + options.flags);
-    if (
-      options.flags &&
-      options.flags.vtta &&
-      options.flags.vtta.dndbeyond &&
-      options.flags.vtta.dndbeyond.type &&
-      (options.img === undefined ||
-        options.img.toLowerCase() === "icons/svg/mystery-man.svg")
-    ) {
-      submitItem(options.name, options.type, options.flags.vtta.dndbeyond.type);
-    }
+    // console.log("Options.flags?" + options.flags);
+    // if (
+    //   options.flags &&
+    //   options.flags.vtta &&
+    //   options.flags.vtta.dndbeyond &&
+    //   options.flags.vtta.dndbeyond.type &&
+    //   (options.img === undefined ||
+    //     options.img.toLowerCase() === "icons/svg/mystery-man.svg")
+    // ) {
+    //   submitItem(options.name, options.type, options.flags.vtta.dndbeyond.type);
+    // }
     console.log("preCreateOwnedItem finshed");
   });
 
