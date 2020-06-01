@@ -1,7 +1,4 @@
 import utils from "./utils.js";
-import SettingsExtender from "./settings-extender.js";
-
-SettingsExtender();
 
 /**
  * Module initialisation, game settings registering
@@ -91,38 +88,28 @@ export async function ready() {
       game.settings.get(s.module, s.key);
     } catch (err) {
       hasErrors = true;
-      ui.notifications.info(
-        `[${s.module}] Erroneous module settings found, resetting to default.`
-      );
+      ui.notifications.info(`[${s.module}] Erroneous module settings found, resetting to default.`);
       game.settings.set(s.module, s.key, s.default);
     }
   }
 
   if (hasErrors) {
-    ui.notifications.warn(
-      "Please review the module settings to re-adjust them to your desired configuration."
-    );
+    ui.notifications.warn("Please review the module settings to re-adjust them to your desired configuration.");
   }
 
   let iconData = new Map();
-  let iconDatabasePolicy = game.settings.get(
-    "vtta-iconizer",
-    "icon-database-policy"
-  );
+  let iconDatabasePolicy = game.settings.get("vtta-iconizer", "icon-database-policy");
 
   // load the base dictionary
   if (iconDatabasePolicy === 0 || iconDatabasePolicy === 1) {
-    let path = `/modules/vtta-iconizer/data/${game.settings.get(
-      "vtta-iconizer",
-      "base-dictionary"
-    )}`;
+    let path = `/modules/vtta-iconizer/data/${game.settings.get("vtta-iconizer", "base-dictionary")}`;
 
     let fileExists = await utils.serverFileExists(path);
     if (fileExists) {
       let response = await fetch(path, { method: "GET" });
 
       let json = await response.json();
-      json.forEach((data) => {
+      json.forEach(data => {
         iconData.set(data.name.toLowerCase(), data.icon);
       });
     }
@@ -130,15 +117,12 @@ export async function ready() {
 
   // load the custom icon database (if there is any)
   if (iconDatabasePolicy === 1 || iconDatabasePolicy === 2) {
-    let path = `/${game.settings.get(
-      "vtta-iconizer",
-      "icon-directory"
-    )}/icons.json`;
+    let path = `/${game.settings.get("vtta-iconizer", "icon-directory")}/icons.json`;
     let fileExists = await utils.serverFileExists(path);
     if (fileExists) {
       let response = await fetch(path, { method: "GET" });
       let json = await response.json();
-      json.forEach((data) => {
+      json.forEach(data => {
         iconData.set(data.name.toLowerCase(), data.icon);
       });
     }
@@ -147,7 +131,7 @@ export async function ready() {
   /**
    * Replaces the icon if the name changed and if the game settings allow that
    */
-  let replaceIcon = (options) => {
+  let replaceIcon = options => {
     utils.log(options);
     // if there is no name change here, just continue
     if (!options || !options.name) return options;
@@ -156,10 +140,7 @@ export async function ready() {
     const REPLACEMENT_POLICY_REPLACE_DEFAULT = 1;
     const REPLACEMENT_POLICY_REPLACE_NONE = 2;
 
-    let replacementPolicy = game.settings.get(
-      "vtta-iconizer",
-      "replacement-policy"
-    );
+    let replacementPolicy = game.settings.get("vtta-iconizer", "replacement-policy");
 
     // stop right here if we should not replace anything
     if (replacementPolicy === REPLACEMENT_POLICY_REPLACE_NONE) return;
@@ -167,8 +148,7 @@ export async function ready() {
     if (
       replacementPolicy === REPLACEMENT_POLICY_REPLACE_ALL ||
       (replacementPolicy === REPLACEMENT_POLICY_REPLACE_DEFAULT &&
-        (!options.img ||
-          options.img.toLowerCase().indexOf("mystery-man") !== -1))
+        (!options.img || options.img.toLowerCase().indexOf("mystery-man") !== -1))
     ) {
       let name = options.name
         .toLowerCase()
@@ -178,26 +158,15 @@ export async function ready() {
 
       if (newIcon !== undefined) {
         // accept absolute references to icons and do not prefix with the icon directory
-        if (
-          newIcon.startsWith("/") ||
-          newIcon.indexOf("://") === 0 ||
-          newIcon.indexOf("http") === 0
-        ) {
+        if (newIcon.startsWith("/") || newIcon.indexOf("://") === 0 || newIcon.indexOf("http") === 0) {
           options.img = newIcon;
         } else {
           // online references by wowhead-icons.json
-          let baseDictionary = game.settings.get(
-            "vtta-iconizer",
-            "base-dictionary"
-          );
+          let baseDictionary = game.settings.get("vtta-iconizer", "base-dictionary");
           if (baseDictionary === "wowhead-icons.json") {
-            options.img =
-              "https://wow.zamimg.com/images/wow/icons/large" + "/" + newIcon;
+            options.img = "https://wow.zamimg.com/images/wow/icons/large" + "/" + newIcon;
           } else {
-            options.img =
-              game.settings.get("vtta-iconizer", "icon-directory") +
-              "/" +
-              newIcon;
+            options.img = game.settings.get("vtta-iconizer", "icon-directory") + "/" + newIcon;
           }
         }
       } else {
@@ -213,67 +182,6 @@ export async function ready() {
 
     return options;
   };
-
-  /*
-   * Submitting icons will be coming, need to prepare backend for it
-   */
-  // let submitItem = (name, type, subType) => {
-  //   const query = {
-  //     name: name,
-  //     type: type,
-  //     subType: subType,
-  //   };
-
-  //   if (
-  //     game.settings.get("vtta-iconizer", "share-missing-icons") &&
-  //     query.subType &&
-  //     game.system.id === "dnd5e" &&
-  //     (game.settings.get("vtta-iconizer", "base-dictionary") ===
-  //       "wow-icons.json" ||
-  //       game.settings.get("vtta-iconizer", "base-dictionary") ===
-  //         "wowhead-icons.json")
-  //   ) {
-  //     // It looks like an D&D Beyond import
-  //     let url = `https://www.vttassets.com/api/iconizer/items/submit`;
-  //     //let url = `http://localhost:3000/api/iconizer/items/submit`;
-  //     console.log("VTTA Iconizer | Submitting item: ");
-  //     console.log(query);
-  //     try {
-  //       fetch(url, {
-  //         method: "POST",
-  //         headers: {
-  //           Accept: "application/json",
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(query),
-  //       })
-  //         .then((response) => {
-  //           console.log(response);
-  //           if (response.status === 200) {
-  //             ui.notifications.info(
-  //               "VTTA Iconizer | Item succesfully submitted: " +
-  //                 query.name +
-  //                 " / " +
-  //                 query.type
-  //             );
-  //             console.log(
-  //               "VTTA Iconizer | Item submitted successfully - thank you!"
-  //             );
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           console.log(error);
-  //           utils.log("Error while sending the item data to VTTAssets");
-  //           utils.log(error.message);
-  //         })
-  //         .finally(() => {
-  //           console.log("Welp!");
-  //         });
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
 
   // Hook on the item create events to replace the icon
   Hooks.on("preCreateItem", (createData, options, userId) => {
@@ -294,9 +202,7 @@ export async function ready() {
     //Hooks.on("preCreateOwnedItem", (parent, createData, options) => {
     options = replaceIcon(options);
     console.log("+++++++++++++++++++++++++++++++++++++++");
-    console.log(
-      "preCreateOwnedItem almost finished, let's check if that item came from a Foundry import:"
-    );
+    console.log("preCreateOwnedItem almost finished, let's check if that item came from a Foundry import:");
     console.log(options);
 
     // console.log("Options.flags?" + options.flags);
@@ -325,7 +231,7 @@ export async function ready() {
     options = replaceIcon(options);
   });
 
-  document.addEventListener("queryIcon", (event) => {
+  document.addEventListener("queryIcon", event => {
     if (event.detail && event.detail.name) {
       let response = replaceIcon({ name: event.detail.name });
       document.dispatchEvent(new CustomEvent("deliverIcon", response));
@@ -334,21 +240,15 @@ export async function ready() {
     }
   });
 
-  document.addEventListener("queryIcons", (event) => {
-    if (
-      event.detail &&
-      event.detail.names &&
-      Array.isArray(event.detail.names)
-    ) {
+  document.addEventListener("queryIcons", event => {
+    if (event.detail && event.detail.names && Array.isArray(event.detail.names)) {
       let response = [];
       for (let name of event.detail.names) {
         let result = replaceIcon(name);
         response.push(replaceIcon(name));
       }
 
-      document.dispatchEvent(
-        new CustomEvent("deliverIcon", { detail: response })
-      );
+      document.dispatchEvent(new CustomEvent("deliverIcon", { detail: response }));
     }
   });
 }
