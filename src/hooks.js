@@ -117,14 +117,31 @@ export async function ready() {
 
   // load the custom icon database (if there is any)
   if (iconDatabasePolicy === 1 || iconDatabasePolicy === 2) {
-    let path = `/${game.settings.get("vtta-iconizer", "icon-directory")}/icons.json`;
-    let fileExists = await utils.serverFileExists(path);
-    if (fileExists) {
-      let response = await fetch(path, { method: "GET" });
-      let json = await response.json();
-      json.forEach(data => {
-        iconData.set(data.name.toLowerCase(), data.icon);
-      });
+    const prefix = game.settings.get("vtta-iconizer", "icon-directory");
+    console.log("Prefix is: " + prefix);
+    if (prefix.indexOf("http") === 0) {
+      console.log("starting with http");
+      let path = `${game.settings.get("vtta-iconizer", "icon-directory")}/icons.json`;
+      try {
+        let response = await fetch(path, { method: "GET" });
+        let json = await response.json();
+        json.forEach(data => {
+          iconData.set(data.name.toLowerCase(), data.icon);
+        });
+      } catch (error) {
+        console.log(error);
+        console.log("Error loading custom dictionary from " + path);
+      }
+    } else {
+      let path = `/${game.settings.get("vtta-iconizer", "icon-directory")}/icons.json`;
+      let fileExists = await utils.serverFileExists(path);
+      if (fileExists) {
+        let response = await fetch(path, { method: "GET" });
+        let json = await response.json();
+        json.forEach(data => {
+          iconData.set(data.name.toLowerCase(), data.icon);
+        });
+      }
     }
   }
 
