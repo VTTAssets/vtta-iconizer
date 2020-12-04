@@ -1,11 +1,11 @@
 {
   "name": "vtta-iconizer",
   "title": "Iconizer",
-  "description": "Sets item's icons automatically based on a prepulated and/or user-defined dictionary",
+  "description": "Sets item's icons automatically based on a pre-populated and/or user-defined dictionary",
   "version": "2.1.12",
   "minimumCoreVersion": "0.5.5",
   "compatibleCoreVersion": "0.7.7",
-  "author": "Sebastian Will",
+  "author": "Sebastian Will, MrPrimate",
   "languages": [
     {
       "lang": "en",
