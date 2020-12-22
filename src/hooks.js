@@ -102,7 +102,7 @@ export async function ready() {
 
   // load the base dictionary
   if (iconDatabasePolicy === 0 || iconDatabasePolicy === 1) {
-    let path = `/${ROUTE_PREFIX}/modules/vtta-iconizer/data/${game.settings.get("vtta-iconizer", "base-dictionary")}`;
+    let path = `(ROUTE_PREFIX ? `/${ROUTE_PREFIX}` : ``)/modules/vtta-iconizer/data/${game.settings.get("vtta-iconizer", "base-dictionary")}`;
 
     let fileExists = await utils.serverFileExists(path);
     if (fileExists) {
