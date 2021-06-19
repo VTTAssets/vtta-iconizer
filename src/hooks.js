@@ -177,14 +177,14 @@ export async function ready() {
       if (newIcon !== undefined) {
         // accept absolute references to icons and do not prefix with the icon directory
         if (newIcon.startsWith("/") || newIcon.indexOf("://") === 0 || newIcon.indexOf("http") === 0) {
-          options.img = newIcon;
+          options.data._source.img = newIcon;
         } else {
           // online references by wowhead-icons.json
           let baseDictionary = game.settings.get("vtta-iconizer", "base-dictionary");
           if (baseDictionary === "wowhead-icons.json") {
-            options.img = "https://wow.zamimg.com/images/wow/icons/large" + "/" + newIcon;
+            options.data._source.img = "https://wow.zamimg.com/images/wow/icons/large" + "/" + newIcon;
           } else {
-            options.img = game.settings.get("vtta-iconizer", "icon-directory") + "/" + newIcon;
+            options.data._source.img = game.settings.get("vtta-iconizer", "icon-directory") + "/" + newIcon;
           }
         }
       } else {
