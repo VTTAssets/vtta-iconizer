@@ -2,10 +2,10 @@
   "name": "vtta-iconizer",
   "title": "Iconizer",
   "description": "Sets item's icons automatically based on a pre-populated and/or user-defined dictionary",
-  "version": "2.1.15",
-  "minimumCoreVersion": "0.5.5",
-  "compatibleCoreVersion": "0.7.9",
-  "author": "Sebastian Will, MrPrimate",
+  "version": "2.1.16",
+  "minimumCoreVersion": "0.8.6",
+  "compatibleCoreVersion": "0.8.6",
+  "author": "Sebastian Will, MrPrimate, ParadoxGery",
   "languages": [
     {
       "lang": "en",
@@ -21,8 +21,8 @@
   "esmodules": ["src/index.js"],
   "styles": [],
   "packs": [],
-  "url": "https://github.com/mrprimate/vtta-iconizer/",
-  "manifest": "https://github.com/mrprimate/vtta-iconizer/releases/download/latest/module.json",
-  "download": "https://github.com/mrprimate/vtta-iconizer/releases/download/2.1.15/vtta-iconizer.zip"
+  "url": "https://github.com/ParadoxGery/vtta-iconizer/",
+  "manifest": "https://raw.githubusercontent.com/ParadoxGery/vtta-iconizer/master/module.json",
+  "download": "https://github.com/ParadoxGery/vtta-iconizer/archive/master.zip"
 }
 

@@ -177,14 +177,14 @@ export async function ready() {
       if (newIcon !== undefined) {
         // accept absolute references to icons and do not prefix with the icon directory
         if (newIcon.startsWith("/") || newIcon.indexOf("://") === 0 || newIcon.indexOf("http") === 0) {
-          options.data._source.img = newIcon;
+          options.img = newIcon;
         } else {
           // online references by wowhead-icons.json
           let baseDictionary = game.settings.get("vtta-iconizer", "base-dictionary");
           if (baseDictionary === "wowhead-icons.json") {
-            options.data._source.img = "https://wow.zamimg.com/images/wow/icons/large" + "/" + newIcon;
+            options.img = "https://wow.zamimg.com/images/wow/icons/large" + "/" + newIcon;
           } else {
-            options.data._source.img = game.settings.get("vtta-iconizer", "icon-directory") + "/" + newIcon;
+            options.img = game.settings.get("vtta-iconizer", "icon-directory") + "/" + newIcon;
           }
         }
       } else {
@@ -204,7 +204,13 @@ export async function ready() {
   // Hook on the item create events to replace the icon
   Hooks.on("preCreateItem", (createData, options, userId) => {
     console.log("preCreateItem");
-    createData = replaceIcon(createData);
+    let opts = {
+      name: createData.name,
+      img: createData.img
+    }
+    opts = replaceIcon(opts);
+
+    createData.data._source.img = opts.img
   });
 
   Hooks.on("preUpdateItem", (entity, updateData, options, userId) => {
