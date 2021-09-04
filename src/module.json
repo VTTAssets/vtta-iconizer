@@ -45,7 +45,7 @@
   ],
   "minimumCoreVersion": "0.7.10",
   "compatibleCoreVersion": "0.8.9",
-  "esmodules": ["src/index.js"],
+  "esmodules": ["index.js"],
   "styles": [],
   "packs": [],
   "url": "https://github.com/ParadoxGery/vtta-iconizer/",
