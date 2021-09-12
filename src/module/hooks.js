@@ -1,5 +1,7 @@
 import utils from './utils.js';
 
+export const VTTA_ICNONIZER_MODULE_NAME = 'vtta-iconizer';
+
 /**
  * Module initialisation, game settings registering
  */
@@ -12,37 +14,37 @@ export function init() {
     CONFIG.debug.vtta.iconizer = debug;
   }
 
-  game.settings.register('vtta-iconizer', 'replacement-policy', {
-    name: 'vtta-iconizer.replacement-policy.name',
-    hint: 'vtta-iconizer.replacement-policy.hint',
+  game.settings.register(VTTA_ICNONIZER_MODULE_NAME, 'replacement-policy', {
+    name: VTTA_ICNONIZER_MODULE_NAME + '.replacement-policy.name',
+    hint: VTTA_ICNONIZER_MODULE_NAME + '.replacement-policy.hint',
     scope: 'world',
     config: true,
     type: Number,
     default: 0,
     choices: [
-      'vtta-iconizer.replacement-policy.0',
-      'vtta-iconizer.replacement-policy.1',
-      'vtta-iconizer.replacement-policy.2',
+      VTTA_ICNONIZER_MODULE_NAME + '.replacement-policy.0',
+      VTTA_ICNONIZER_MODULE_NAME + '.replacement-policy.1',
+      VTTA_ICNONIZER_MODULE_NAME + '.replacement-policy.2',
     ],
   });
 
-  game.settings.register('vtta-iconizer', 'icon-database-policy', {
-    name: 'vtta-iconizer.icon-database-policy.name',
-    hint: 'vtta-iconizer.icon-database-policy.hint',
+  game.settings.register(VTTA_ICNONIZER_MODULE_NAME, 'icon-database-policy', {
+    name: VTTA_ICNONIZER_MODULE_NAME + '.icon-database-policy.name',
+    hint: VTTA_ICNONIZER_MODULE_NAME + '.icon-database-policy.hint',
     scope: 'world',
     config: true,
     type: Number,
     default: 0,
     choices: [
-      'vtta-iconizer.icon-database-policy.0',
-      'vtta-iconizer.icon-database-policy.1',
-      'vtta-iconizer.icon-database-policy.2',
+      VTTA_ICNONIZER_MODULE_NAME + '.icon-database-policy.0',
+      VTTA_ICNONIZER_MODULE_NAME + '.icon-database-policy.1',
+      VTTA_ICNONIZER_MODULE_NAME + '.icon-database-policy.2',
     ],
   });
 
-  game.settings.register('vtta-iconizer', 'base-dictionary', {
-    name: 'vtta-iconizer.base-dictionary.name',
-    hint: 'vtta-iconizer.base-dictionary.hint',
+  game.settings.register(VTTA_ICNONIZER_MODULE_NAME, 'base-dictionary', {
+    name: VTTA_ICNONIZER_MODULE_NAME + '.base-dictionary.name',
+    hint: VTTA_ICNONIZER_MODULE_NAME + '.base-dictionary.hint',
     scope: 'world',
     config: true,
     type: String,
@@ -55,9 +57,9 @@ export function init() {
   });
 
   // Relabeling "icon directory" to "icon prefix" setting
-  game.settings.register('vtta-iconizer', 'icon-directory', {
-    name: 'vtta-iconizer.icon-prefix.name',
-    hint: 'vtta-iconizer.icon-prefix.hint',
+  game.settings.register(VTTA_ICNONIZER_MODULE_NAME, 'icon-directory', {
+    name: VTTA_ICNONIZER_MODULE_NAME + '.icon-prefix.name',
+    hint: VTTA_ICNONIZER_MODULE_NAME + '.icon-prefix.hint',
     scope: 'world',
     config: true,
     type: String,
@@ -83,7 +85,7 @@ export async function ready() {
   let hasErrors = false;
 
   for (let s of game.settings.settings.values()) {
-    if (s.module !== 'vtta-iconizer') continue;
+    if (s.module !== VTTA_ICNONIZER_MODULE_NAME) continue;
     try {
       game.settings.get(s.module, s.key);
     } catch (err) {
@@ -98,12 +100,15 @@ export async function ready() {
   }
 
   let iconData = new Map();
-  let iconDatabasePolicy = game.settings.get('vtta-iconizer', 'icon-database-policy');
+  let iconDatabasePolicy = game.settings.get(VTTA_ICNONIZER_MODULE_NAME, 'icon-database-policy');
 
   // load the base dictionary
   if (iconDatabasePolicy === 0 || iconDatabasePolicy === 1) {
     const basePath = ROUTE_PREFIX ? `/${ROUTE_PREFIX}` : '';
-    const path = `${basePath}/modules/vtta-iconizer/data/${game.settings.get('vtta-iconizer', 'base-dictionary')}`;
+    const path = `${basePath}/modules/vtta-iconizer/data/${game.settings.get(
+      VTTA_ICNONIZER_MODULE_NAME,
+      'base-dictionary',
+    )}`;
 
     const fileExists = await utils.serverFileExists(path);
     if (fileExists) {
@@ -118,11 +123,11 @@ export async function ready() {
 
   // load the custom icon database (if there is any)
   if (iconDatabasePolicy === 1 || iconDatabasePolicy === 2) {
-    const prefix = game.settings.get('vtta-iconizer', 'icon-directory');
+    const prefix = game.settings.get(VTTA_ICNONIZER_MODULE_NAME, 'icon-directory');
     console.log('Prefix is: ' + prefix);
     if (prefix.indexOf('http') === 0) {
       console.log('starting with http');
-      let path = `${game.settings.get('vtta-iconizer', 'icon-directory')}/icons.json`;
+      let path = `${game.settings.get(VTTA_ICNONIZER_MODULE_NAME, 'icon-directory')}/icons.json`;
       try {
         let response = await fetch(path, { method: 'GET' });
         let json = await response.json();
@@ -134,7 +139,7 @@ export async function ready() {
         console.log('Error loading custom dictionary from ' + path);
       }
     } else {
-      let path = `/${game.settings.get('vtta-iconizer', 'icon-directory')}/icons.json`;
+      let path = `/${game.settings.get(VTTA_ICNONIZER_MODULE_NAME, 'icon-directory')}/icons.json`;
       let fileExists = await utils.serverFileExists(path);
       if (fileExists) {
         let response = await fetch(path, { method: 'GET' });
@@ -158,7 +163,7 @@ export async function ready() {
     const REPLACEMENT_POLICY_REPLACE_DEFAULT = 1;
     const REPLACEMENT_POLICY_REPLACE_NONE = 2;
 
-    let replacementPolicy = game.settings.get('vtta-iconizer', 'replacement-policy');
+    let replacementPolicy = game.settings.get(VTTA_ICNONIZER_MODULE_NAME, 'replacement-policy');
 
     // stop right here if we should not replace anything
     if (replacementPolicy === REPLACEMENT_POLICY_REPLACE_NONE) return;
@@ -173,6 +178,11 @@ export async function ready() {
         .replace(/\([^)]*\)/g, '')
         .trim();
       let newIcon = iconData.get(name);
+      if (!newIcon) {
+        // Issue https://github.com/VTTAssets/vtta-iconizer/issues/7
+        name = name.replace( "'",'’');
+        newIcon = iconData.get(name);
+      }
 
       if (newIcon !== undefined) {
         // accept absolute references to icons and do not prefix with the icon directory
@@ -180,11 +190,11 @@ export async function ready() {
           options.img = newIcon;
         } else {
           // online references by wowhead-icons.json
-          let baseDictionary = game.settings.get('vtta-iconizer', 'base-dictionary');
+          let baseDictionary = game.settings.get(VTTA_ICNONIZER_MODULE_NAME, 'base-dictionary');
           if (baseDictionary === 'wowhead-icons.json') {
             options.img = 'https://wow.zamimg.com/images/wow/icons/large' + '/' + newIcon;
           } else {
-            options.img = game.settings.get('vtta-iconizer', 'icon-directory') + '/' + newIcon;
+            options.img = game.settings.get(VTTA_ICNONIZER_MODULE_NAME, 'icon-directory') + '/' + newIcon;
           }
         }
       } else {
