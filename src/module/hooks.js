@@ -180,7 +180,7 @@ export async function ready() {
       let newIcon = iconData.get(name);
       if (!newIcon) {
         // Issue https://github.com/VTTAssets/vtta-iconizer/issues/7
-        name = name.replace( "'",'’');
+        name = name.replace("'", '’');
         newIcon = iconData.get(name);
       }
 
