@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.17] Foundry 0.8.9 compatibility release
+
+## [2.1.16] Foundry 0.8.6 compatibility release
+
 ## [2.1.11] Foundry 0.6.1 compatibility release
 
 ### Changed
