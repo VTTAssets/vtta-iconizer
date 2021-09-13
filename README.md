@@ -6,6 +6,18 @@ Iconizer watches the creation of items in your world, and tries to find a suitab
 - creating a dictionary
 - create items and watch the magic happen
 
+## Installation
+
+It's always easiest to install modules from the in game add-on browser.
+
+To install this module manually:
+1.  Inside the Foundry "Configuration and Setup" screen, click "Add-on Modules"
+2.  Click "Install Module"
+3.  In the "Manifest URL" field, paste the following url:
+`https://raw.githubusercontent.com/VTTAssets/vtta-iconizer/master/src/module.json`
+4.  Click 'Install' and wait for installation to complete
+5.  Don't forget to enable the module in game using the "Manage Module" button
+
 ## Pre-requisites
 
 **Disclaimer:** I strongly advise to use icons that you have actually licensed, and urge you not to redistribute any icons that you are not allowed to redistribute.
@@ -154,3 +166,7 @@ npm run-script package
 ## Issues
 
 Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/VTTAssets/vtta-iconizer/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
+
+## License
+
+This package is under an [MIT license](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
