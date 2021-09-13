@@ -16,7 +16,7 @@ jobs:
       shell: bash
       id: get-version
       run: echo "::set-output name=version::$(node ./.github/workflows/get-version.js)"
-    - run: zip -r ./vtta-iconizer.zip module.json src data lang LICENSE.md       # Add folders/files here
+    - run: zip -r ./vtta-iconizer.zip src # Add folders/files here
     - name: Create Release                                # Create an additional release for this version
       id: create_versioned_release
       uses: ncipollo/release-action@v1
