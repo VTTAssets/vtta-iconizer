@@ -6,6 +6,8 @@ Iconizer watches the creation of items in your world, and tries to find a suitab
 - creating a dictionary
 - create items and watch the magic happen
 
+## NOTE: If you are a javascript developer and not a typescript developer, you can just use the javascript files under the dist folder
+
 ## Installation
 
 It's always easiest to install modules from the in game add-on browser.

@@ -2,7 +2,7 @@
   "name": "vtta-iconizer",
   "title": "Iconizer",
   "description": "Sets item's icons automatically based on a pre-populated and/or user-defined dictionary",
-  "version": "2.1.17",
+  "version": "2.1.18",
   "author": "Sebastian Will, MrPrimate, VTTAssets, p4535992",
   "type": "module",
   "socket": true,
@@ -43,18 +43,19 @@
       "path": "lang/de.json"
     }
   ],
-  "minimumCoreVersion": "0.7.10",
-  "compatibleCoreVersion": "0.8.9",
   "esmodules": ["index.js"],
   "styles": [],
   "packs": [],
-  "url": "https://github.com/VTTAssets/vtta-iconizer",
-  "readme": "https://raw.githubusercontent.com/VTTAssets/vtta-iconizer/master/README.md",
-  "manifest": "https://raw.githubusercontent.com/VTTAssets/vtta-iconizer/master/src/module.json",
-  "download": "https://raw.githubusercontent.com/VTTAssets/vtta-iconizer/master/package/vtta-iconizer-v2.1.17.zip",
-  "changelog": "https://raw.githubusercontent.com/VTTAssets/vtta-iconizer/master/changelog.md",
+  "minimumCoreVersion": "0.7.10",
+  "compatibleCoreVersion": "0.8.9",
+  "manifestPlusVersion": "1.2.0",
+  "url": "https://github.com/VTTAssets/vtta-iconizer/",
+  "manifest": "https://github.com/VTTAssets/vtta-iconizer/releases/latest/download/module.json",
+  "download": "https://github.com/VTTAssets/vtta-iconizer/releases/download/v2.1.18/module.zip",
+  "readme": "https://github.com/VTTAssets/vtta-iconizer/blob/v2.1.18/README.md",
+  "changelog": "https://github.com/VTTAssets/vtta-iconizer/blob/v2.1.18/changelog.md",
   "bugs": "https://github.com/VTTAssets/vtta-iconizer/issues",
   "allowBugReporter": true,
-  "manifestPlusVersion": "1.2.0",
+
   "dependencies": []
 }
