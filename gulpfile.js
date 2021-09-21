@@ -210,6 +210,13 @@ function buildSASS() {
 }
 
 /**
+ * Build JSON
+ */
+ function buildJSON() {
+  return gulp.src('src/**/*.json').pipe(gulp.dest('dist'));
+}
+
+/**
  * Copy static files
  */
 async function copyFiles() {
@@ -236,6 +243,7 @@ function buildWatch() {
   gulp.watch('src/**/*.js', { ignoreInitial: false }, buildJS);
   gulp.watch('src/**/*.mjs', { ignoreInitial: false }, buildMJS);
   gulp.watch('src/**/*.css', { ignoreInitial: false }, buildCSS);
+  gulp.watch('src/**/*.json', { ignoreInitial: false }, buildJSON);
   gulp.watch(['src/fonts', 'src/lang', 'src/templates', 'src/*.json'], { ignoreInitial: false }, copyFiles);
 }
 
@@ -492,7 +500,7 @@ function gitTag() {
 
 const execGit = gulp.series(gitAdd, gitCommit, gitTag);
 
-const execBuild = gulp.parallel(buildTS, buildJS, buildMJS, buildCSS, buildLess, buildSASS, copyFiles);
+const execBuild = gulp.parallel(buildTS, buildJS, buildMJS, buildCSS, buildLess, buildSASS, buildJSON, copyFiles);
 
 exports.build = gulp.series(clean, execBuild);
 exports.watch = buildWatch;

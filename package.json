@@ -3,7 +3,7 @@
   "name": "vtta-iconizer",
   "title": "Iconizer",
   "description": "Sets item's icons automatically based on a pre-populated and/or user-defined dictionary",
-  "version": "2.1.18",
+  "version": "2.1.19",
   "scripts": {
     "package": "gulp package",
     "build": "gulp build && gulp link",
